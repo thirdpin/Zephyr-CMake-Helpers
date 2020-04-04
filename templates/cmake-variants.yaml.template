@@ -1,0 +1,24 @@
+app:
+  default: app
+  description: App configurations
+  choices:
+    app:
+      short: app config
+      settings:
+        CONF_FILE: app/prj.conf
+        # ZEPHYR_MODULES: <path-to-module1>[;<path-to-module2>[...]]
+
+board:
+  default: qemu_riscv32
+  description: Board select
+  choices:
+    qemu_riscv32:
+      short: QEMU riscv32
+      settings:
+        BOARD: qemu_riscv32
+    kekpek:
+      short: kekpek board
+      settings:
+        BOARD: de10_lite_scr1
+        OUT_OF_TREE_BOARD: ON
+        OUT_OF_TREE_SOC: ON

@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.15)
+
+# If we are not the top level project
+# we should not make Zephyr init again
+if (NOT DEFINED CMAKE_PROJECT_NAME)
+    # Zephyr initialization
+    include(cmake/zephyr.cmake)
+endif()
+
+# Application project
+# ===================
+
+project(app C CXX ASM)
+
+target_sources(
+    app 
+    PRIVATE src/main.cpp 
+)
+
+target_include_directories(
+    app
+    PRIVATE src
+)
