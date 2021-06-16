@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.20)
+
 # parse_zephyr_config
 # -------------------
 #
@@ -20,6 +22,19 @@ function(parse_zephyr_config
 )
 
 if (WEST_CONFIG_FILE_PATH)
+    cmake_path(NORMAL_PATH WEST_CONFIG_FILE_PATH)
+
+    # Assume that base of paths set in the manifest is a path without trailing .west/config part
+    cmake_path(GET WEST_CONFIG_FILE_PATH PARENT_PATH PATH_BASE)
+    cmake_path(GET PATH_BASE PARENT_PATH PATH_BASE)
+    cmake_path(APPEND PATH_BASE ".west/config" OUTPUT_VARIABLE assume_check)
+    cmake_path(COMPARE ${WEST_CONFIG_FILE_PATH} EQUAL ${assume_check} assumed_path_equal)
+    if (NOT assumed_path_equal)
+        message(FATAL_ERROR
+        "Error in the logic of resolving the base path of paths set in the manifest file. "
+        "Is the trailing part of the manifest file path is '.west/config'?")
+    endif()
+
     file(READ ${WEST_CONFIG_FILE_PATH} WEST_CONFIG_FILE)
     
     set(CONFIG_ZEPHYR_BASE_ "")
@@ -30,7 +45,7 @@ if (WEST_CONFIG_FILE_PATH)
     if (CMAKE_MATCH_1)
         get_filename_component(
             CONFIG_ZEPHYR_BASE_
-            ${CMAKE_SOURCE_DIR}/${CMAKE_MATCH_1}
+            ${PATH_BASE}/${CMAKE_MATCH_1}
             ABSOLUTE)
 
         string(REGEX MATCH "base-prefer = ([a-z]+)" _ ${WEST_CONFIG_FILE})
