@@ -73,31 +73,16 @@ if (NOT SKIP_CMAKE_HALPERS)
   # Set correct ZEPHYR_BASE var if we call CMake directly without west meta-tool
   include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
 
-  if (APPLICATION_SOURCE_DIR_BASE)
-    if (NOT ZEPHYR_MANIFEST_DIR)
-      message(STATUS "ZEPHYR_MANIFEST_DIR is not set. Assume same as found APPLICATION_SOURCE_DIR_BASE: \"${APPLICATION_SOURCE_DIR_BASE}\"")
-      set(ZEPHYR_MANIFEST_DIR "${APPLICATION_SOURCE_DIR_BASE}")
-    endif()
-  endif()
+  include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
+  find_zephyr_west_config()
 
+  cmake_path(APPEND ZEPHYR_MANIFEST_DIR ".west/config" OUTPUT_VARIABLE ZEPHYR_MANIFEST_PATH)
 
-  if(ZEPHYR_MANIFEST_DIR)
-    cmake_path(IS_RELATIVE ZEPHYR_MANIFEST_DIR ZEPHYR_MANIFEST_DIR_is_relative)
-    if(ZEPHYR_MANIFEST_DIR_is_relative)
-      set(ZEPHYR_MANIFEST_PATH
-          "${CMAKE_SOURCE_DIR}/${ZEPHYR_MANIFEST_DIR}/.west/config")
-    else()
-      set(ZEPHYR_MANIFEST_PATH "${ZEPHYR_MANIFEST_DIR}/.west/config")
-    endif()
-  else()
-      set(ZEPHYR_MANIFEST_PATH "${CMAKE_SOURCE_DIR}/.west/config")
-  endif()
-
-  cmake_path(NORMAL_PATH ZEPHYR_MANIFEST_PATH)
-
-  message(STATUS "Check west-manifest \"${ZEPHYR_MANIFEST_PATH}\" for overriding")
+  message(STATUS "Check west manifest \"${ZEPHYR_MANIFEST_PATH}\" for ZEPHYR_BASE overriding")
 
   extract_zephyr_base_loc(${ZEPHYR_MANIFEST_PATH})
+
+  message(STATUS "ZEPHYR_BASE_LOC: ${ZEPHYR_BASE_LOC}")
 
   cmake_path(COMPARE "$ENV{ZEPHYR_BASE}" EQUAL "${ZEPHYR_BASE_LOC}" IS_ZEPHYR_BASE_NOT_OVERRIDED)
   if (IS_ZEPHYR_BASE_NOT_OVERRIDED)
@@ -105,7 +90,7 @@ if (NOT SKIP_CMAKE_HALPERS)
   else()
     # Force correct Zephyr path
     set(ENV{ZEPHYR_BASE} ${ZEPHYR_BASE_LOC})
-    message(STATUS "ZEPHYR_BASE is overridding by manifest and is sets as \"$ENV{ZEPHYR_BASE}\".")
+    message(STATUS "ZEPHYR_BASE is overridding by west manifest and is sets as \"$ENV{ZEPHYR_BASE}\".")
   endif()
 
   if (CMAKE_BUILD_TYPE)
