@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.20)
 
 if (DEFINED WEST_PYTHON)
   message(STATUS "Expected, is run by West tool. Skip Cmake Helpers initialization")
