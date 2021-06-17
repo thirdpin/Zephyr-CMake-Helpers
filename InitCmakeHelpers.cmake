@@ -33,7 +33,7 @@ if (NOT SKIP_CMAKE_HELPERS)
   include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
   find_zephyr_west_config()
 
-  cmake_path(APPEND ZEPHYR_MANIFEST_DIR ".west/config" OUTPUT_VARIABLE ZEPHYR_MANIFEST_PATH)
+  cmake_path(APPEND WEST_WORKSPACE_DIR ".west/config" OUTPUT_VARIABLE ZEPHYR_MANIFEST_PATH)
 
   message(STATUS "Check west manifest \"${ZEPHYR_MANIFEST_PATH}\" for ZEPHYR_BASE overriding")
 
