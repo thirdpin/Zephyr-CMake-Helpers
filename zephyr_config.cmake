@@ -41,7 +41,7 @@ function(parse_zephyr_config
 if (WEST_CONFIG_FILE_PATH AND EXISTS ${WEST_CONFIG_FILE_PATH})
     cmake_path(NORMAL_PATH WEST_CONFIG_FILE_PATH)
 
-    # Assume that base of paths set in the manifest is a path without trailing .west/config part
+    # Check that WEST_CONFIG_FILE_PATH ends with ".west/config part" because it's only valid case
     cmake_path(GET WEST_CONFIG_FILE_PATH PARENT_PATH PATH_BASE)
     cmake_path(GET PATH_BASE PARENT_PATH PATH_BASE)
     cmake_path(APPEND PATH_BASE ".west/config" OUTPUT_VARIABLE assume_check)
