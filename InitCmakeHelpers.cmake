@@ -19,12 +19,12 @@ cmake_minimum_required(VERSION 3.20)
 
 if (DEFINED WEST_PYTHON)
   message(STATUS "Expected, is run by West tool. Skip Cmake Helpers initialization")
-  set(SKIP_CMAKE_HALPERS 1)
+  set(SKIP_CMAKE_HELPERS 1)
 else()
-  set(SKIP_CMAKE_HALPERS 0)
+  set(SKIP_CMAKE_HELPERS 0)
 endif()
 
-if (NOT SKIP_CMAKE_HALPERS)
+if (NOT SKIP_CMAKE_HELPERS)
   message(STATUS "##### CMake Helpers Initialization start")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
 
