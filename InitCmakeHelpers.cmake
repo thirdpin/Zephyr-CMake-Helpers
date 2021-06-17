@@ -110,7 +110,7 @@ if (NOT SKIP_CMAKE_HELPERS)
 
   if (CMAKE_BUILD_TYPE)
     unset(CMAKE_BUILD_TYPE CACHE)
-    message(STATUS "Reseted preconfigured CMAKE_BUILD_TYPE. Zephyr has to care about it itself.")
+    message(STATUS "Reset preconfigured CMAKE_BUILD_TYPE. Zephyr has to care about it itself.")
   endif()
 
   list(POP_BACK CMAKE_MESSAGE_INDENT)
