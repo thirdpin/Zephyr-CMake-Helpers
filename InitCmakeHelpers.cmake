@@ -30,9 +30,6 @@ if (NOT SKIP_CMAKE_HELPERS)
 
   message(STATUS "ZEPHYR_BASE environment is set as \"$ENV{ZEPHYR_BASE}\"")
 
-  # Set correct ZEPHYR_BASE var if we call CMake directly without west meta-tool
-  include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
-
   include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
   find_zephyr_west_config()
 
@@ -40,6 +37,8 @@ if (NOT SKIP_CMAKE_HELPERS)
 
   message(STATUS "Check west manifest \"${ZEPHYR_MANIFEST_PATH}\" for ZEPHYR_BASE overriding")
 
+  # Set correct ZEPHYR_BASE var if we call CMake directly without west meta-tool
+  include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
   extract_zephyr_base_loc(${ZEPHYR_MANIFEST_PATH})
 
   cmake_path(COMPARE "$ENV{ZEPHYR_BASE}" EQUAL "${ZEPHYR_BASE_LOC}" IS_ZEPHYR_BASE_NOT_OVERRIDED)
