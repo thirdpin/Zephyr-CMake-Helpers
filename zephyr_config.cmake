@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
+cmake_minimum_required(VERSION 3.20)
+
 # parse_zephyr_config
 # -------------------
 #
@@ -36,7 +38,20 @@ function(parse_zephyr_config
         CONFIG_ZEPHYR_BASE CONFIG_ZEPHYR_BASE_PREFER_CONFIG
 )
 
-if (WEST_CONFIG_FILE_PATH)
+if (WEST_CONFIG_FILE_PATH AND EXISTS ${WEST_CONFIG_FILE_PATH})
+    cmake_path(NORMAL_PATH WEST_CONFIG_FILE_PATH)
+
+    # Check that WEST_CONFIG_FILE_PATH ends with ".west/config part" because it's only valid case
+    cmake_path(GET WEST_CONFIG_FILE_PATH PARENT_PATH PATH_BASE)
+    cmake_path(GET PATH_BASE PARENT_PATH PATH_BASE)
+    cmake_path(APPEND PATH_BASE ".west/config" OUTPUT_VARIABLE assume_check)
+    cmake_path(COMPARE ${WEST_CONFIG_FILE_PATH} EQUAL ${assume_check} assumed_path_equal)
+    if (NOT assumed_path_equal)
+        message(FATAL_ERROR
+        "Error in the logic of resolving the base path of paths set in the manifest file. "
+        "Is the trailing part of the manifest file path is '.west/config'?")
+    endif()
+
     file(READ ${WEST_CONFIG_FILE_PATH} WEST_CONFIG_FILE)
     
     set(CONFIG_ZEPHYR_BASE_ "")
@@ -47,7 +62,7 @@ if (WEST_CONFIG_FILE_PATH)
     if (CMAKE_MATCH_1)
         get_filename_component(
             CONFIG_ZEPHYR_BASE_
-            ${CMAKE_SOURCE_DIR}/${CMAKE_MATCH_1}
+            ${PATH_BASE}/${CMAKE_MATCH_1}
             ABSOLUTE)
 
         string(REGEX MATCH "base-prefer = ([a-z]+)" _ ${WEST_CONFIG_FILE})
