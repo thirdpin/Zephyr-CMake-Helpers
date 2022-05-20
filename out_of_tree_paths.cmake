@@ -16,12 +16,16 @@
 # License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 macro(resolve_path_for WHAT)
-    if (DEFINED OUT_OF_TREE_${WHAT})
-        if (OUT_OF_TREE_${WHAT})
-            set(${WHAT}_ROOT ${APPLICATION_SOURCE_DIR})
-            message(STATUS "Out of tree ${WHAT}_ROOT found: '${${WHAT}_ROOT}'")
-        endif()
+  if(DEFINED OUT_OF_TREE_${WHAT})
+    if(OUT_OF_TREE_${WHAT})
+      if(DEFINED ${APPLICATION_SOURCE_DIR})
+        set(${WHAT}_ROOT ${APPLICATION_SOURCE_DIR})
+      else()
+        set(${WHAT}_ROOT ${CMAKE_SOURCE_DIR})
+      endif()
+      message(STATUS "Out of tree ${WHAT}_ROOT found: '${${WHAT}_ROOT}'")
     endif()
+  endif()
 endmacro()
 
 resolve_path_for(SOC)
