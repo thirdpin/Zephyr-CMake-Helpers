@@ -84,4 +84,4 @@ VS Code
 
 For VS Code IDE you can use "cmake-variants.yaml.template". Propose and
 description of this could be found in [CMake Tools extension
-docs(https://vector-of-bool.github.io/docs/vscode-cmake-tools/variants.html).
+docs](https://vector-of-bool.github.io/docs/vscode-cmake-tools/variants.html).
