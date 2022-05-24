@@ -15,22 +15,15 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
-# Extract version
-include(${CMAKE_CURRENT_LIST_DIR}/zephyr_version.cmake)
-
-# Find "out of tree" board
-include(${CMAKE_CURRENT_LIST_DIR}/out_of_tree_board.cmake)
-
-# Setup Zephyr and its toolchains
-if (${ZEPHYR_VERSION} VERSION_GREATER_EQUAL "2.2.99")
-    # This way is the most modern one
-    # It requires to call `west zephyr-export` first
-    find_package(Zephyr HINTS $ENV{ZEPHYR_BASE})
-    if (NOT Zephyr_FOUND)
-        message(FATAL_ERROR "Make `west zephyr-export` first!")
+macro(resolve_path_for WHAT)
+  if(DEFINED OUT_OF_TREE_${WHAT})
+    if(OUT_OF_TREE_${WHAT})
+      if(NOT DEFINED ${WHAT}_ROOT)
+        set(${WHAT}_ROOT ${APPLICATION_SOURCE_DIR})
+      endif()
+      message(STATUS "Out of tree ${WHAT}_ROOT is set: '${${WHAT}_ROOT}'")
     endif()
-else()
-    # Old way to initialize Zephyr
-    include($ENV{ZEPHYR_BASE}/cmake/app/boilerplate.cmake NO_POLICY_SCOPE)
-    message(STATUS "Old way to initialize Zephyr")
-endif()
+  endif()
+endmacro()
+
+resolve_path_for(BOARD)
