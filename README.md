@@ -13,7 +13,7 @@ scripts try to make up for the loss.
 
 ## How to use
 
-> **Note** Application root in <u>not</u> the root of your C/C++ project. See
+> **Note** Application root is <u>not</u> the root of your C/C++ project. See
 > [Zephyr freestanding
 > application](https://docs.zephyrproject.org/latest/develop/application/index.html#zephyr-freestanding-application).
 
