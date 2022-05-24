@@ -17,60 +17,64 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-if(DEFINED WEST_PYTHON)
-  message(
-    STATUS "Expected, is run by West tool. Skip Cmake Helpers initialization")
-  set(SKIP_CMAKE_HELPERS 1)
-else()
-  set(SKIP_CMAKE_HELPERS 0)
-endif()
-
 if(NOT SKIP_CMAKE_HELPERS)
-  message(STATUS "##### CMake Helpers Initialization start")
-  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+    message(STATUS "CMake Helpers Initialization start")
+    list(APPEND CMAKE_MESSAGE_INDENT "  ")
 
-  message(STATUS "ZEPHYR_BASE environment is set as \"$ENV{ZEPHYR_BASE}\"")
+    message(STATUS "ZEPHYR_BASE environment is set as \"$ENV{ZEPHYR_BASE}\"")
 
-  include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
-  find_zephyr_west_config()
+    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
+    find_zephyr_west_config()
 
-  cmake_path(APPEND WEST_WORKSPACE_DIR ".west/config" OUTPUT_VARIABLE
-             ZEPHYR_MANIFEST_PATH)
-
-  message(
-    STATUS
-      "Check west manifest \"${ZEPHYR_MANIFEST_PATH}\" for ZEPHYR_BASE overriding"
-  )
-
-  # Set correct ZEPHYR_BASE var if we call CMake directly without west meta-tool
-  include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
-  extract_zephyr_base_loc(${ZEPHYR_MANIFEST_PATH})
-
-  cmake_path(COMPARE "$ENV{ZEPHYR_BASE}" EQUAL "${ZEPHYR_BASE_LOC}"
-             IS_ZEPHYR_BASE_NOT_OVERRIDED)
-
-  if(IS_ZEPHYR_BASE_NOT_OVERRIDED)
-    message(STATUS "ZEPHYR_BASE was not overridden")
-  else()
-    # Force correct Zephyr path
-    set(ENV{ZEPHYR_BASE} ${ZEPHYR_BASE_LOC})
-    message(
-      STATUS
-        "ZEPHYR_BASE is overridding by west manifest and is sets as \"$ENV{ZEPHYR_BASE}\"."
+    cmake_path(
+        APPEND WEST_WORKSPACE_DIR ".west/config"
+        OUTPUT_VARIABLE ZEPHYR_MANIFEST_PATH
     )
-  endif()
 
-  if(CMAKE_BUILD_TYPE)
-    unset(CMAKE_BUILD_TYPE CACHE)
-    message(
-      STATUS
-        "Reset preconfigured CMAKE_BUILD_TYPE. Zephyr has to care about it itself."
+    message(STATUS "Check west manifest \"${ZEPHYR_MANIFEST_PATH}\" "
+                   "for ZEPHYR_BASE overriding"
     )
-  endif()
 
-  # Add Zephyr target and app target into scope
-  include(${CMAKE_CURRENT_LIST_DIR}/zephyr.cmake)
+    # Set correct ZEPHYR_BASE var if we call CMake directly without west meta-tool
+    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
+    extract_zephyr_base_loc(${ZEPHYR_MANIFEST_PATH})
 
-  list(POP_BACK CMAKE_MESSAGE_INDENT)
-  message(STATUS "##### CMake Helpers Initialization finish")
+    cmake_path(
+        COMPARE "$ENV{ZEPHYR_BASE}" EQUAL "${ZEPHYR_BASE_LOC}"
+                IS_ZEPHYR_BASE_NOT_OVERRIDED
+    )
+
+    if(IS_ZEPHYR_BASE_NOT_OVERRIDED)
+        message(STATUS "ZEPHYR_BASE was not overridden")
+    else()
+        # Force correct Zephyr path
+        set(ENV{ZEPHYR_BASE} ${ZEPHYR_BASE_LOC})
+        message(STATUS "ZEPHYR_BASE is overridding by west manifest "
+                       "and is sets as \"$ENV{ZEPHYR_BASE}\"."
+        )
+    endif()
+
+    if(CMAKE_BUILD_TYPE)
+        unset(CMAKE_BUILD_TYPE CACHE)
+        message(STATUS "Reset preconfigured CMAKE_BUILD_TYPE. "
+                       "Zephyr has to care about it itself."
+        )
+    endif()
+
+    if(DEFINED APPLICATION_SOURCE_DIR)
+        message(STATUS "Leave user defined APPLICATION_SOURCE_DIR "
+                       "untoched: ${APPLICATION_SOURCE_DIR}"
+        )
+    else()
+        set(APPLICATION_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
+        message(
+            STATUS "APPLICATION_SOURCE_DIR is set to ${APPLICATION_SOURCE_DIR}"
+        )
+    endif()
+
+    list(POP_BACK CMAKE_MESSAGE_INDENT)
+    message(STATUS "CMake Helpers Initialization finish")
 endif()
+
+# Add Zephyr target and app target into scope
+include(${CMAKE_CURRENT_LIST_DIR}/zephyr.cmake)
