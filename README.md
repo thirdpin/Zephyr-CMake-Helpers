@@ -60,17 +60,12 @@ You can also force the Zephyr location by setting `-DZEPHYR_BASE_LOC` CMake
 argument.
 
 
-## Out-of-tree folders
+## Application source dir
 
-If you want to enable out-of-tree folders for soc, board or dts you can use
-`-DOUT_OF_TREE_<what>`. For example:
-
-
-```bash
-cmake -Happ -Bbuild -DOUT_OF_TREE_SOC -DOUT_OF_TREE_BOARD .
-```
-
-Folders should be located in the application folder root.
+Zephyr finds "out of tree" dts-files in
+[APPLICATION_SOURCE_DIR](https://docs.zephyrproject.org/latest/develop/application/index.html#devicetree-definitions).
+Helpers sets this variable to your application root, but you can rewrite it by
+setting APPLICATION_SOURCE_DIR manually with flag `-DAPPLICATION_SOURCE_DIR`.
 
 
 Other arguments
