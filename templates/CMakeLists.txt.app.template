@@ -1,18 +1,22 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Add CMake scripts (includes) into scope
-list(
-    APPEND
-    CMAKE_MODULE_PATH
-    "${CMAKE_CURRENT_LIST_DIR}/cmake/helpers/"
-)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/helpers/")
 
-set(APPLICATION_SOURCE_DIR
-    "${CMAKE_CURRENT_SOURCE_DIR}/app"
-    CACHE PATH "Application Source Directory"
-)
-
+# Helpers boilerplate
 include(zephyr_cmake_helpers_init)
+
+## Here you can add modules path to ZEPHYR_EXTRA_MODULES list e.g.
+# add_zephyr_extra_modules(
+#     PATHS 
+#         drivers/ssi
+#         drivers/sn74hc165
+#         drivers/sn74hc595
+# )
+
+# Add Zephyr target and app target into scope
+include(zephyr)
+
 
 # Application project
 # ===================

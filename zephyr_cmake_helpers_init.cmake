@@ -17,13 +17,20 @@
 
 cmake_minimum_required(VERSION 3.20)
 
+include(zephyr_extra_modules)
+
 if(NOT SKIP_CMAKE_HELPERS)
-    message(STATUS "CMake Helpers Initialization start")
+    include(${CMAKE_CURRENT_LIST_DIR}/details/color.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
+
+    message(STATUS "${BoldBlue}" "CMake Helpers Initialization Start"
+                   "${ColourReset}"
+    )
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
 
     message(STATUS "ZEPHYR_BASE environment is set as \"$ENV{ZEPHYR_BASE}\"")
 
-    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
     find_zephyr_west_config()
 
     cmake_path(
@@ -36,7 +43,6 @@ if(NOT SKIP_CMAKE_HELPERS)
     )
 
     # Set correct ZEPHYR_BASE var if we call CMake directly without west meta-tool
-    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
     extract_zephyr_base_loc(${ZEPHYR_MANIFEST_PATH})
 
     cmake_path(
@@ -57,13 +63,13 @@ if(NOT SKIP_CMAKE_HELPERS)
     if(CMAKE_BUILD_TYPE)
         unset(CMAKE_BUILD_TYPE CACHE)
         message(STATUS "Reset preconfigured CMAKE_BUILD_TYPE. "
-                       "Zephyr has to care about it itself."
+                       "Zephyr has to care about it itself"
         )
     endif()
 
     if(DEFINED APPLICATION_SOURCE_DIR)
         message(STATUS "Leave user defined APPLICATION_SOURCE_DIR "
-                       "untoched: ${APPLICATION_SOURCE_DIR}"
+                       "untouched: ${APPLICATION_SOURCE_DIR}"
         )
     else()
         set(APPLICATION_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
@@ -73,8 +79,7 @@ if(NOT SKIP_CMAKE_HELPERS)
     endif()
 
     list(POP_BACK CMAKE_MESSAGE_INDENT)
-    message(STATUS "CMake Helpers Initialization finish")
+    message(STATUS "${BoldBlue}" "CMake Helpers Initialization Finish"
+                   "${ColourReset}"
+    )
 endif()
-
-# Add Zephyr target and app target into scope
-include(${CMAKE_CURRENT_LIST_DIR}/zephyr.cmake)
