@@ -62,10 +62,14 @@ argument.
 
 ## Application source dir
 
-Zephyr finds "out of tree" dts-files in
+Zephyr finds "out of tree" DTS-files in
 [APPLICATION_SOURCE_DIR](https://docs.zephyrproject.org/latest/develop/application/index.html#devicetree-definitions).
 Helpers sets this variable to your application root, but you can rewrite it by
-setting APPLICATION_SOURCE_DIR manually with flag `-DAPPLICATION_SOURCE_DIR`.
+setting `APPLICATION_SOURCE_DIR` manually with flag `-DAPPLICATION_SOURCE_DIR`.
+`APPLICATION_SOURCE_DIR` must be an absolute path.
+
+You also can set `DTS_ROOT` variable manualy to change DTS root without touching
+application source dir. `DTS_ROOT` must be an absoulute path.
 
 
 Other arguments
