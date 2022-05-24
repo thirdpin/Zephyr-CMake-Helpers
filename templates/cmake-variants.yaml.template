@@ -20,5 +20,3 @@ board:
       short: kekpek board
       settings:
         BOARD: de10_lite_scr1
-        OUT_OF_TREE_BOARD: ON
-        OUT_OF_TREE_SOC: ON
