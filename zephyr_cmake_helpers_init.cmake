@@ -21,8 +21,8 @@ include(zephyr_extra_modules)
 
 if(NOT SKIP_CMAKE_HELPERS)
     include(${CMAKE_CURRENT_LIST_DIR}/details/color.cmake)
-    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_west.cmake)
-    include(${CMAKE_CURRENT_LIST_DIR}/zephyr_loc.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/details/zephyr_west.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/details/zephyr_loc.cmake)
 
     message(STATUS "${BoldBlue}" "CMake Helpers Initialization Start"
                    "${ColourReset}"
