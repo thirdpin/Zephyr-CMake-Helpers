@@ -11,6 +11,7 @@ Zephyr supports to build by CMake, but with it lost some automatically
 environment preparings. E.g. configurations set in West manifest. So these
 scripts try to make up for the loss.
 
+
 ## How to use
 
 > **Note** Application root is <u>not</u> the root of your C/C++ project. See
@@ -18,12 +19,10 @@ scripts try to make up for the loss.
 > application](https://docs.zephyrproject.org/latest/develop/application/index.html#zephyr-freestanding-application).
 
 Add this repository as a submodule or Zephyr module somewhere in your project.
-For the tempate file (see more about tempate file below) a path to the helpers
-is assumed to be **/app/cmake/helpers**.
-
 Copy **CMakeList.txt.app.template** directly into your project structure into
 the root of your <u>application</u> (where "boards", "soc" and other
-"out-of-tree" folders usually located) and rename it to **CMakeList.txt**.
+"out-of-tree" folders usually located) and rename it to **CMakeList.txt**. Path
+to the helpers is assumed to be **/app/cmake/helpers**, but it can be any.
 
 You should list your application source files in **app/CMakeList.txt** as
 usual by passing it to the `target_sources` CMake function.
@@ -44,7 +43,9 @@ cmake -Happ -Bbuild
 there `app` is your application root directory relative to the root of the
 project.
 
-Or trigger build by CMake-supported IDE.
+Or trigger the build by CMake-supported IDE.
+
+You can use `west` to build and configure you application too if it's needed.
 
 
 ## Zephyr location
@@ -53,8 +54,8 @@ The preferred way is to define a Zephyr location in **.west/config** file. You
 can do it with `zephyr.base` option (see [Zephyr
 docs](https://docs.zephyrproject.org/latest/guides/west/config.html)).
 `zephyr.base-prefer` option should be also set to `configfile` to override
-`ZEPYR_BASE` env variable. Otherwise `ZEPYR_BASE` will be used as the Zephyr
-location.
+`ZEPYR_BASE` env variable. Otherwise `ZEPYR_BASE` env varialble will be used as
+the Zephyr location by helpers.
 
 You can also force the Zephyr location by setting `-DZEPHYR_BASE_LOC` CMake
 argument.
@@ -65,18 +66,27 @@ argument.
 Zephyr finds "out of tree" DTS-files in
 [APPLICATION_SOURCE_DIR](https://docs.zephyrproject.org/latest/develop/application/index.html#devicetree-definitions).
 Helpers sets this variable to your application root, but you can rewrite it by
-setting `APPLICATION_SOURCE_DIR` manually with flag `-DAPPLICATION_SOURCE_DIR`.
+setting `APPLICATION_SOURCE_DIR` manually with flag `-DAPPLICATION_SOURCE_DIR`
+or with the `set` CMake function. Do it before including helpers boilerplate.
 `APPLICATION_SOURCE_DIR` must be an absolute path.
 
 You also can set `DTS_ROOT` variable manualy to change DTS root without touching
 application source dir. `DTS_ROOT` must be an absoulute path.
 
 
+## Out of tree board
+
+You can use `-DOUT_OF_TREE_BOARD=ON` to let helpers know if your application
+root contains out of tree board description. You also can set it manually with
+`-DBOARD_ROOT` according to the Zephyr docs.
+
+
 Other arguments
 ===============
 
-You can use other arguments, like `CONF_FILE`, `BOARD` or `ZEPHYR_MODULES` as
-usual. See details about these in Zephyr docs.
+You can use other arguments, like `CONF_FILE` and `BOARD` as usual. See details
+about these in Zephyr docs.
+
 
 VS Code
 =======
