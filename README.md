@@ -47,6 +47,55 @@ Or trigger the build by CMake-supported IDE.
 
 You can use `west` to build and configure you application too if it's needed.
 
+Another available and quite handy option to configure project is to use
+**CMakePresets.json**. Put it into the application root. For example:
+
+```js
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 22,
+        "patch": 1
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Default config for my fancy board",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "environment": {},
+            "cacheVariables": {
+                "CONF_FILE": "prj.conf",
+                "BOARD": "my-fancy-board",
+                "OUT_OF_TREE_BOARD": "ON",
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default"
+        }
+    ],
+    "testPresets": [],
+    "vendor": {}
+}
+```
+
+Then you can run CMake configuration with
+
+```bash
+cmake . -Happ --preset default
+```
+
+and build with
+
+```bash
+cmake --build ./app/build
+```
+
 
 ## Zephyr location
 
