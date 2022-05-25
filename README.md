@@ -43,58 +43,25 @@ cmake -Happ -Bbuild
 there `app` is your application root directory relative to the root of the
 project.
 
-Or trigger the build by CMake-supported IDE.
-
-You can use `west` to build and configure you application too if it's needed.
-
 Another available and quite handy option to configure project is to use
-**CMakePresets.json**. Put it into the application root. For example:
-
-```js
-{
-    "version": 3,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 22,
-        "patch": 1
-    },
-    "configurePresets": [
-        {
-            "name": "default",
-            "displayName": "Default Config",
-            "description": "Default config for my fancy board",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build",
-            "environment": {},
-            "cacheVariables": {
-                "CONF_FILE": "prj.conf",
-                "BOARD": "my-fancy-board",
-                "OUT_OF_TREE_BOARD": "ON",
-            }
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "default",
-            "configurePreset": "default"
-        }
-    ],
-    "testPresets": [],
-    "vendor": {}
-}
-```
-
-Then you can run CMake configuration with
+**CMakePresets.json**. Copy it from the templates folder into the application
+root. Correct some fields. Then you can run CMake configuration with
 
 ```bash
-cmake . -Happ --preset default
+cmake . -Happ --preset qemu_riscv32
 ```
 
 and build with
 
 ```bash
-cmake --build ./app/build
+cmake --build ./app/build/qemu_riscv32
 ```
+
+If your IDE supports CMakePresets.json (VS Code do) when you can select preset
+and trigger configure/build process from IDE.
+
+Finally you can use `west` to build and configure you application too if it's
+needed.
 
 
 ## Zephyr location
