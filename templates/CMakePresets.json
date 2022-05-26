@@ -1,0 +1,48 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 22,
+        "patch": 1
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default config",
+            "description": "Default config for my fancy board",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "environment": {},
+            "cacheVariables": {
+                "CONF_FILE": "prj.conf",
+                "BOARD": "my-fancy-board",
+                "OUT_OF_TREE_BOARD": "ON"
+            }
+        },
+        {
+            "name": "qemu_riscv32",
+            "displayName": "qemu_riscv32 config",
+            "description": "Default config for QEMU riscv32",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "environment": {},
+            "cacheVariables": {
+                "CONF_FILE": "prj.conf",
+                "BOARD": "qemu_riscv32",
+                "OUT_OF_TREE_BOARD": "OFF"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default"
+        },
+        {
+            "name": "qemu_riscv32",
+            "configurePreset": "qemu_riscv32"
+        }
+    ],
+    "testPresets": [],
+    "vendor": {}
+}

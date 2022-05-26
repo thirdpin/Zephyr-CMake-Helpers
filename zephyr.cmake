@@ -16,10 +16,10 @@
 # License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 # Extract version
-include(${CMAKE_CURRENT_LIST_DIR}/zephyr_version.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/details/zephyr_version.cmake)
 
-# Resolve out of tree paths if any enabled
-include(${CMAKE_CURRENT_LIST_DIR}/out_of_tree_paths.cmake)
+# Find "out of tree" board
+include(${CMAKE_CURRENT_LIST_DIR}/details/out_of_tree_board.cmake)
 
 # Setup Zephyr and its toolchains
 if (${ZEPHYR_VERSION} VERSION_GREATER_EQUAL "2.2.99")
