@@ -52,8 +52,8 @@ if(NOT SKIP_CMAKE_HELPERS)
     else()
         # Force correct Zephyr path
         set(ENV{ZEPHYR_BASE} ${ZEPHYR_BASE_LOC})
-        message(STATUS "ZEPHYR_BASE is overridding by west manifest "
-                       "and is sets as \"$ENV{ZEPHYR_BASE}\"."
+        message(STATUS "ZEPHYR_BASE is overridded by west manifest "
+                       "and was set as \"$ENV{ZEPHYR_BASE}\"."
         )
     endif()
 
@@ -69,7 +69,28 @@ if(NOT SKIP_CMAKE_HELPERS)
                        "untouched: ${APPLICATION_SOURCE_DIR}"
         )
     else()
-        set(APPLICATION_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
+        # If this file was included from project root CMakeLists.txt then we
+        # assume that we are building app from root. Overwise from application
+        # root.
+        if(${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+            set(BUILD_FROM_ROOT TRUE)
+        endif()
+
+        if(DEFINED BUILD_FROM_ROOT AND BUILD_FROM_ROOT)
+            # We in root folder
+            message(STATUS "Building from project root")
+            set(APPLICATION_SOURCE_DIR
+                "${CMAKE_SOURCE_DIR}/app"
+                CACHE PATH "Application Source Directory"
+            )
+        else()
+            # We already in `app` folder
+            message(STATUS "Building from application root")
+            set(APPLICATION_SOURCE_DIR
+                "${CMAKE_SOURCE_DIR}"
+                CACHE PATH "Application Source Directory"
+            )
+        endif()
         message(
             STATUS "APPLICATION_SOURCE_DIR is set to ${APPLICATION_SOURCE_DIR}"
         )

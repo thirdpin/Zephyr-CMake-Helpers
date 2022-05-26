@@ -18,6 +18,9 @@ scripts try to make up for the loss.
 > [Zephyr freestanding
 > application](https://docs.zephyrproject.org/latest/develop/application/index.html#zephyr-freestanding-application).
 
+> **Note** If you want to setup CMake to build from the root of project
+> see "Use from root of project" section below.
+
 Add this repository as a submodule or Zephyr module somewhere in your project.
 Copy **CMakeList.txt.app.template** directly into your project structure into
 the root of your <u>application</u> (where "boards", "soc" and other
@@ -63,6 +66,23 @@ and trigger configure/build process from IDE.
 Finally you can use `west` to build and configure you application too if it's
 needed.
 
+### Use from root of project
+
+If you don't want to move the root CMakeLists.txt to application root, you can
+leave it in the project root. Just simply:
+
+- copy **CMakeLists.txt.app.template** in your root and rename it to
+  **CMakeList.txt**;
+- set path to helpers correctly;
+- create **CMakeLists.txt** in application root;
+- move everything after line `project(app C CXX ASM)` into application root
+  **CMakeLists.txt**;
+- append project root **CMakeLists.txt** with
+  `add_subdirectory(<path_to_application_root>)`.
+
+It's done! You can configure and build your project. But remember that from now
+there is no need in changing *CMake source directory* in your IDE settings and
+during the command line build (you can get rid of `-H` arg).
 
 ## Zephyr location
 
