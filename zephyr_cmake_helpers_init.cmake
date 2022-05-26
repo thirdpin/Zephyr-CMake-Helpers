@@ -72,7 +72,7 @@ if(NOT SKIP_CMAKE_HELPERS)
         # If this file was included from project root CMakeLists.txt then we
         # assume that we are building app from root. Overwise from application
         # root.
-        if(${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+        if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
             set(BUILD_FROM_ROOT TRUE)
         endif()
 
