@@ -17,9 +17,12 @@ scripts try to make up for the loss.
 > **Note** Application root is <u>not</u> the root of your C/C++ project. See
 > [Zephyr freestanding
 > application](https://docs.zephyrproject.org/latest/develop/application/index.html#zephyr-freestanding-application).
+>
+> For this helpers the application root is assumed to be an "app" folder in
+> project root directory.
 
-> **Note** If you want to setup CMake to build from the root of project
-> see "Use from root of project" section below.
+> **Note** If you want to setup CMake to build from the project root, not
+> application root see "Use from root of project" section below.
 
 Add this repository as a submodule or Zephyr module somewhere in your project.
 Copy **CMakeList.txt.app.template** directly into your project structure into
@@ -64,20 +67,21 @@ If your IDE supports CMakePresets.json (VS Code do) when you can select preset
 and trigger configure/build process from IDE.
 
 Finally you can use `west` to build and configure you application too if it's
-needed.
+needed but you should pass to it a path to application root (see `west` tool
+help).
 
 ### Use from root of project
 
-If you don't want to move the root CMakeLists.txt to application root, you can
-leave it in the project root. Just simply:
+If you don't want to move the root CMakeLists.txt to the application root, you
+can leave it in the project root. Just simply:
 
-- copy **CMakeLists.txt.app.template** in your root and rename it to
+- copy **CMakeLists.txt.app.template** into your root dir and rename it to
   **CMakeList.txt**;
 - set path to helpers correctly;
 - create **CMakeLists.txt** in application root;
-- move everything after line `project(app C CXX ASM)` into application root
+- move everything after line `project(app C CXX ASM)` into the application root
   **CMakeLists.txt**;
-- append project root **CMakeLists.txt** with
+- append the toplevel **CMakeLists.txt** with
   `add_subdirectory(<path_to_application_root>)`.
 
 It's done! You can configure and build your project. But remember that from now
